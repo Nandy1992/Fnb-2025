@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Book</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    body {
+      background: linear-gradient(to right, #7f7fd5, #86a8e7, #91eae4);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .card {
+      border-radius: 15px;
+    }
+    .card img {
+      border: 3px solid #f857a6;
+      padding: 2px;
+    }
+    .btn {
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container my-5">
+    <div class="card shadow-lg text-center">
+      <div class="card-header text-white py-4" style="background: linear-gradient(to right, #f857a6, #ff5858);">
+        <h2>📱 Contact Book</h2>
+        <p>Manage your contacts with this simple offline app.</p>
+      </div>
+      <div class="card-body">
+        <div class="d-flex justify-content-end mb-3">
+          <button class="btn btn-primary me-2" onclick="loadContacts()">🔄 Refresh</button>
+          <button class="btn btn-success" onclick="addContact()">➕ Add Contact</button>
+        </div>
+        <h4 class="text-start">Your Contacts</h4>
+        <div class="row" id="contact-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let contacts = [
+      {
+        id: 1,
+        name: "Maud Ram",
+        mobile: "123",
+        email: "No email",
+        image: "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+      },
+      {
+        id: 2,
+        name: "Palesa Kutloano",
+        mobile: "0123456789",
+        email: "love@life.com",
+        image: "https://randomuser.me/api/portraits/women/44.jpg"
+      },
+      {
+        id: 3,
+        name: "lilly toom",
+        mobile: "125",
+        email: "asdsd@wwdf",
+        image: "https://randomuser.me/api/portraits/men/1.jpg"
+      },
+      {
+        id: 4,
+        name: "Obito Uchiha",
+        mobile: "123",
+        email: "mrsmith@gmail.com",
+        image: "https://randomuser.me/api/portraits/men/50.jpg"
+      }
+    ];
+
+    function loadContacts() {
+      const contactList = document.getElementById("contact-list");
+      contactList.innerHTML = "";
+      contacts.forEach(contact => {
+        const col = document.createElement("div");
+        col.className = "col-md-6 col-lg-4 my-2";
+        col.innerHTML = `
+          <div class="card">
+            <div class="card-body text-center">
+              <img src="${contact.image}" class="rounded-circle mb-2" width="60" />
+              <h5 class="card-title">${contact.name}</h5>
+              <p><strong>Mobile:</strong> ${contact.mobile}</p>
+              <p><strong>Email:</strong> ${contact.email}</p>
+              <button class="btn btn-primary me-1" onclick="editContact(${contact.id})">✏️ Edit</button>
+              <button class="btn btn-danger" onclick="deleteContact(${contact.id})">🗑️ Delete</button>
+            </div>
+          </div>
+        `;
+        contactList.appendChild(col);
+      });
+    }
+
+    function deleteContact(id) {
+      contacts = contacts.filter(contact => contact.id !== id);
+      loadContacts();
+    }
+
+    function addContact() {
+      const name = prompt("Enter name:");
+      const mobile = prompt("Enter mobile:");
+      const email = prompt("Enter email:");
+      const image = prompt("Enter image URL (or leave blank):") || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+      const newContact = {
+        id: Date.now(),
+        name, mobile, email, image
+      };
+      contacts.push(newContact);
+      loadContacts();
+    }
+
+    function editContact(id) {
+      const contact = contacts.find(c => c.id === id);
+      if (!contact) return;
+      contact.name = prompt("Edit name:", contact.name);
+      contact.mobile = prompt("Edit mobile:", contact.mobile);
+      contact.email = prompt("Edit email:", contact.email);
+      contact.image = prompt("Edit image URL:", contact.image);
+      loadContacts();
+    }
+
+    // Load contacts on page load
+    loadContacts();
+  </script>
+</body>
+</html>
